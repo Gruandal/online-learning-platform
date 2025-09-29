@@ -1,34 +1,18 @@
-name: GitHub Activity in README
+name: Update GitHub Activity
 
 on:
   schedule:
-    - cron: "0 * * * *"   # 每小時自動執行一次
-  workflow_dispatch:       # 可以手動觸發
+    - cron: "*/30 * * * *"   # 每 30 分鐘執行一次
+  workflow_dispatch:         # 可以手動觸發
 
 jobs:
-  update-readme:
+  update-activity:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.REPO_TOKEN }}
-
-      - name: Setup Git identity
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Update GitHub Activity
-        uses: jamesgeorge007/github-activity-readme@v0.4.4
+        uses: TheDanniCraft/activity-log@v1
         with:
-          GH_USERNAME: "Gruandal"
-          COMMIT_MSG: ":zap: Update README with the recent activity"
-          MAX_LINES: 6
-          TARGET_FILE: "README.md"
-          EMPTY_COMMIT_MSG: ":memo: keep workflow active"
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-          
-      - name: Fix git remote
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.REPO_TOKEN }}@github.com/${{ github.repository }}
+          GITHUB_USERNAME: "Gruandal"   # 你的 GitHub 帳號
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}  # 你在 repo 裡設定的 PAT secret

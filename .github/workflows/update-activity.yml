@@ -1,18 +1,21 @@
-name: Update GitHub Activity
-
+name: Update README
 on:
   schedule:
-    - cron: "*/30 * * * *"   # 每 30 分鐘執行一次
-  workflow_dispatch:         # 可以手動觸發
-
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
 jobs:
-  update-activity:
+  build:
+    name: Update this repos README with recent activity
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
     steps:
       - uses: actions/checkout@v4
-
-      - name: Update GitHub Activity
-        uses: TheDanniCraft/activity-log@v1
+      - uses: jamesgeorge007/github-activity-readme@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          GITHUB_USERNAME: "Gruandal"   # 你的 GitHub 帳號
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}  # 你在 repo 裡設定的 PAT secret
+          COMMIT_MSG: "Specify a custom commit message"
+          MAX_LINES: 10
+          COMMIT_NAME: GitHub Activity Readme
